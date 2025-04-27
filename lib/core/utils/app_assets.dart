@@ -6,6 +6,14 @@ class Assets {
   /// assets/images/car_cover.webp
   static const String imagesCarCover = "assets/images/car_cover.webp";
 
+  /// Assets for imagesFacebookCircle
+  /// assets/images/facebook_circle.png
+  static const String imagesFacebookCircle = "assets/images/facebook_circle.png";
+
+  /// Assets for imagesGoogle
+  /// assets/images/google.png
+  static const String imagesGoogle = "assets/images/google.png";
+
   /// Assets for imagesHtiLogo
   /// assets/images/hti_logo.png
   static const String imagesHtiLogo = "assets/images/hti_logo.png";
