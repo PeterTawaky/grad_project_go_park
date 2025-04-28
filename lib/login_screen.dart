@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_garage_final_project/logging_widget.dart';
 import 'package:smart_garage_final_project/widgets/components/custom_button_for_action.dart';
 import 'package:smart_garage_final_project/widgets/components/custom_social_icon.dart';
 import 'package:smart_garage_final_project/widgets/components/customized_chckbox.dart';
@@ -32,11 +35,23 @@ class LoginScreen extends StatelessWidget {
               (previous, current) =>
                   current is GoogleSignInLoading ||
                   current is GoogleSignInSuccess ||
-                  current is GoogleSignInFailed,
+                  current is GoogleSignInFailed ||
+                  current is FacebookSignInLoading ||
+                  current is FacebookSignInSuccess ||
+                  current is FacebookSignInFailed,
           listener: (context, state) {
-            if (state is GoogleSignInSuccess) {
+            if (state is GoogleSignInSuccess ||
+                state is FacebookSignInSuccess) {
               context.pushReplacementNamed(AppRoutes.goParkScreen);
             } else if (state is GoogleSignInFailed) {
+              if (state.errorMessage != null && state.errorMessage != 'false') {
+                log(state.errorMessage.runtimeType.toString());
+                HelperFunctions.showSnackBar(
+                  msg: state.errorMessage!,
+                  context: context,
+                );
+              }
+            } else if (state is FacebookSignInFailed) {
               if (state.errorMessage != null && state.errorMessage != 'false') {
                 log(state.errorMessage.runtimeType.toString());
                 HelperFunctions.showSnackBar(
@@ -47,8 +62,9 @@ class LoginScreen extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            if (state is GoogleSignInLoading) {
-              return Center(child: CircularProgressIndicator());
+            if (state is GoogleSignInLoading ||
+                state is FacebookSignInLoading) {
+              return LoggingWidget(loggingMessage: AppStrings.signInLogging);
             } else {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +274,11 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(width: 20.w),
                       CustomSocialIcon(
                         image: Assets.imagesFacebookCircle,
-                        onTap: () {},
+                        onTap:
+                            () =>
+                                BlocProvider.of<AuthenticationCubit>(
+                                  context,
+                                ).signInWithFacebook(),
                       ),
                       Spacer(),
                     ],

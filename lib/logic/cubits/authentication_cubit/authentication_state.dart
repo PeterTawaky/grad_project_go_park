@@ -33,8 +33,14 @@ final class LoggingOutSuccess extends AuthenticationState {}
 
 final class GoogleSignInLoading extends AuthenticationState {}
 final class GoogleSignInSuccess extends AuthenticationState {}
-
 final class GoogleSignInFailed extends AuthenticationState {
   final String? errorMessage;
   GoogleSignInFailed({ this.errorMessage});
+}
+
+final class FacebookSignInLoading extends AuthenticationState {}
+final class FacebookSignInSuccess extends AuthenticationState {}
+final class FacebookSignInFailed extends AuthenticationState {
+  final String? errorMessage;
+  FacebookSignInFailed({ this.errorMessage});
 }

@@ -17,5 +17,6 @@ class AppStrings {
   static const String nickName = 'Nick Name';
   static const String createAccount = 'Create Account';
   // --Signout
-  static const String signOut = 'Logging Out';
+  static const String signOutLogging = 'Logging Out';
+  static const String signInLogging = 'Logging iN';
 }

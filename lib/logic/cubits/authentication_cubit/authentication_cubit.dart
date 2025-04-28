@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:smart_garage_final_project/cached/cache_helper.dart';
+import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
 import 'package:smart_garage_final_project/firebase/firebase_auth_consumer.dart';
 
 part 'authentication_state.dart';
@@ -33,15 +36,33 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     );
     return result.fold(
       (result) => emit(AuthenticationError(errorMessage: result)),
-      (result) => emit(AuthenticationSuccess(message: result)),
+      (result) {
+        CachedData.setData(key: KeysManager.signInMethod, value: 'email');
+        emit(AuthenticationSuccess(message: result));
+      },
     );
   }
   //!========================================================================================
 
-  signOut() {
+  signOut() async {
     emit(LoggingOutLoading());
-    FirebaseAuthConsumer.signOutFromGoogle();
-    FirebaseAuthConsumer.signOut();
+
+    String signInMethod = CachedData.getData(key: KeysManager.signInMethod);
+
+    switch (signInMethod) {
+      case 'email':
+        await FirebaseAuthConsumer.signOut();
+        break;
+      case 'google':
+        await FirebaseAuthConsumer.signOutFromGoogle();
+        break;
+      case 'facebook':
+        await FirebaseAuthConsumer.signOutFromFacebook();
+        await FirebaseAuthConsumer.signOut(); // manually sign out from Firebase
+        break;
+      default:
+        break;
+    }
     Future.delayed(
       Duration(seconds: 2),
     ).then((value) => emit(LoggingOutSuccess()));
@@ -61,26 +82,28 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> signInWithGoogle() async {
     emit(GoogleSignInLoading());
     final userCredential = await FirebaseAuthConsumer.signInWithGoogle();
-    userCredential.fold(
-      (ifLeft) => emit(GoogleSignInFailed(errorMessage: ifLeft.toString())),
-      (ifRight) => emit(GoogleSignInSuccess()),
+    Future.delayed(Duration(seconds: 2)).then(
+      (value) => userCredential.fold(
+        (ifLeft) => emit(GoogleSignInFailed(errorMessage: ifLeft.toString())),
+        (ifRight) {
+          CachedData.setData(key: KeysManager.signInMethod, value: 'google');
+          emit(GoogleSignInSuccess());
+        },
+      ),
     );
-    // log('type is ${userCredential.runtimeType.toString()}');
-    // if (userCredential is Future<UserCredential>) {
-    //   return emit(GoogleSignInSuccess());
-    // } else {
-    //   return emit(GoogleSignInFailed());
-    // }
   }
 
-  // signInWithGoogle() {
-  //   emit(GoogleSignInLoading());
-  //   FirebaseAuthConsumer.signInWithGoogle().then((value) {
-  //     if (value != null) {
-  //       emit(GoogleSignInSuccess());
-  //     } else {
-  //       emit(GoogleSignInFailed());
-  //     }
-  //   });
-  // }
+  Future<void> signInWithFacebook() async {
+    emit(FacebookSignInLoading());
+    final userCredential = await FirebaseAuthConsumer.signInWithFacebook();
+    Future.delayed(Duration(seconds: 2)).then(
+      (value) => userCredential.fold(
+        (ifLeft) => emit(FacebookSignInFailed(errorMessage: ifLeft.toString())),
+        (ifRight) {
+          CachedData.setData(key: KeysManager.signInMethod, value: 'facebook');
+          emit(FacebookSignInSuccess());
+        },
+      ),
+    );
+  }
 }

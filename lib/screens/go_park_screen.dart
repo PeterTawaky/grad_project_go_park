@@ -4,13 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_garage_final_project/core/routes/app_routes.dart';
 import 'package:smart_garage_final_project/core/utils/app_assets.dart';
+import 'package:smart_garage_final_project/core/utils/app_strings.dart';
 import 'package:smart_garage_final_project/core/utils/size_config.dart';
 
 import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
 import 'package:smart_garage_final_project/widgets/components/slide_action_button.dart';
 import 'package:smart_garage_final_project/core/utils/theme/fonts_manager.dart';
 import 'package:smart_garage_final_project/logic/cubits/authentication_cubit/authentication_cubit.dart';
-import 'package:smart_garage_final_project/signout_screen.dart';
+import 'package:smart_garage_final_project/logging_widget.dart';
 
 class GoParkingScreen extends StatelessWidget {
   const GoParkingScreen({super.key});
@@ -31,7 +32,7 @@ class GoParkingScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is LoggingOutLoading) {
-            return SignOutWidget();
+            return LoggingWidget(loggingMessage: AppStrings.signOutLogging);
           } else {
             return Stack(
               children: [

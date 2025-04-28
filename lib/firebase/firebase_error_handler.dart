@@ -39,6 +39,9 @@ class FirebaseErrorHandler {
       case FirebaseResponses.networkError:
         log(FirebaseHandledResponses.networkError);
         return FirebaseHandledResponses.networkError;
+        case FirebaseResponses.accountExistsWithDifferentCredential:
+        log(FirebaseHandledResponses.accountExistsWithDifferentCredential);
+        return FirebaseHandledResponses.accountExistsWithDifferentCredential;
       default:
         log(FirebaseHandledResponses.defaultError);
         return FirebaseHandledResponses.defaultError;

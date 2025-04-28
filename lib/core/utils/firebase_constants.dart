@@ -12,6 +12,8 @@ class FirebaseResponses {
   static const String userDisabled = 'user-disabled';
   static const String invalidCredential = 'invalid-credential';
   static const String networkError = 'network_error';
+  static const String accountExistsWithDifferentCredential =
+      'account-exists-with-different-credential';
 }
 
 class FirebaseHandledResponses {
@@ -31,4 +33,6 @@ class FirebaseHandledResponses {
   static const String defaultError = 'An unexpected error occurred.';
   static const String invalidCredential = 'your account or password is wrong';
   static const String networkError = 'Please check your internet connection.';
+  static const String accountExistsWithDifferentCredential =
+      'you use the same account in another social platform';
 }
