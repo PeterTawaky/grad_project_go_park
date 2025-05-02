@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_garage_final_project/core/routes/app_routes.dart';
 import 'package:smart_garage_final_project/logic/cubits/authentication_cubit/authentication_cubit.dart';
+import 'package:smart_garage_final_project/logic/cubits/parking_cubit/parking_cubit.dart';
 import 'package:smart_garage_final_project/login_screen.dart';
 import 'package:smart_garage_final_project/screens/create_account_screen.dart';
 import 'package:smart_garage_final_project/screens/go_park_screen.dart';
@@ -54,7 +55,11 @@ class RouterGenerator {
       GoRoute(
         name: AppRoutes.profileScreen,
         path: AppRoutes.profileScreen,
-        builder: (context, state) => ProfileScreen(),
+        builder:
+            (context, state) => BlocProvider<ParkingCubit>(
+              create: (context) => ParkingCubit(),
+              child: ProfileScreen(),
+            ),
       ),
       GoRoute(
         name: AppRoutes.localAuthenticationScreen,

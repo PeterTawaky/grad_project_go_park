@@ -51,14 +51,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
     switch (signInMethod) {
       case 'email':
-        await FirebaseAuthConsumer.signOut();
+        await FirebaseAuthConsumer.signOutEmailPasswordMethod();
         break;
       case 'google':
         await FirebaseAuthConsumer.signOutFromGoogle();
+        await FirebaseAuthConsumer.signOutEmailPasswordMethod(); // manually sign out from Firebase
         break;
       case 'facebook':
         await FirebaseAuthConsumer.signOutFromFacebook();
-        await FirebaseAuthConsumer.signOut(); // manually sign out from Firebase
+        await FirebaseAuthConsumer.signOutEmailPasswordMethod(); // manually sign out from Firebase
         break;
       default:
         break;

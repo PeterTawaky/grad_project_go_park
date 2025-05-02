@@ -64,7 +64,7 @@ class SlideActionButton extends StatelessWidget {
                       text: '>',
                       style: TextStyle(
                         fontSize: 32,
-                        color: ColorsManager.white.withOpacity(0.6),
+                        color: ColorsManager.white.withValues(alpha: 0.6),
                         fontFamily: FontsManager.poppins,
                       ),
                     ),
@@ -72,7 +72,7 @@ class SlideActionButton extends StatelessWidget {
                       text: '>',
                       style: TextStyle(
                         fontSize: 32,
-                        color: ColorsManager.white.withOpacity(0.3),
+                        color: ColorsManager.white.withValues(alpha: 0.3),
                         fontFamily: FontsManager.poppins,
                       ),
                     ),

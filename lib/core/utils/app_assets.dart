@@ -2,6 +2,10 @@
 class Assets {
   Assets._();
   
+  /// Assets for imagesBmwCarWithoutBackground
+  /// assets/images/bmw_car_without_background.png
+  static const String imagesBmwCarWithoutBackground = "assets/images/bmw_car_without_background.png";
+
   /// Assets for imagesCarCover
   /// assets/images/car_cover.webp
   static const String imagesCarCover = "assets/images/car_cover.webp";

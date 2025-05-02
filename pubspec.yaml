@@ -10,11 +10,13 @@ environment:
 #------------------ Packages -------------------#
 dependencies:
   bloc: ^9.0.0
+  cloud_firestore: ^5.6.7
   conditional_builder_null_safety: ^0.0.6
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   firebase_auth: ^5.5.2
   firebase_core: ^3.13.0
+  firebase_database: ^11.3.5
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.0

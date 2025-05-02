@@ -35,4 +35,10 @@ class TextStyles {
     // fontWeight: FontWeight.w500,
     fontFamily: FontsManager.poppins,
   );
+  static TextStyle font14regularPurple = TextStyle(
+    color: ColorsManager.authScreenPurple,
+    fontSize: 14.sp,
+    // fontWeight: FontWeight.w500,
+    fontFamily: FontsManager.poppins,
+  );
 }

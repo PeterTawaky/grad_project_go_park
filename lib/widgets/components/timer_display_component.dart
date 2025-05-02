@@ -57,7 +57,11 @@ class TimerDisplayComponent extends StatelessWidget {
                 ),
                 Text(
                   '$timeInHours:$timeInMinutes:$timeInSecond',
-                  style: TextStyle(color: ColorsManager.white, fontSize: 34.sp),
+                  style: TextStyle(
+                    color: ColorsManager.white,
+                    fontSize: 36.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

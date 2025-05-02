@@ -21,7 +21,6 @@ class SmartGarage extends StatelessWidget {
           title: 'Smart Garage',
           theme: AppThemeData.darkTheme,
           routerConfig: RouterGenerator.mainRouting,
-          // SplashScreen(),
         );
       },
     );

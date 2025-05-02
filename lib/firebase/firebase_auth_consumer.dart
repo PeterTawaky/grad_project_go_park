@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -52,9 +53,10 @@ class FirebaseAuthConsumer {
         email: email.trim(),
         password: password.trim(),
       );
-      if (sendVerificationMail() == true) {
-        return Right('Please verify your email.');
+      if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+        return Right('Please verify your email before signing in.');
       }
+
       return Right(null);
     } on FirebaseException catch (e) {
       log(e.code);
@@ -68,18 +70,19 @@ class FirebaseAuthConsumer {
 
   //!========================================================================================
 
-  static signOut() async {
+  static signOutEmailPasswordMethod() async {
     await FirebaseAuth.instance.signOut();
   }
 
-  static bool? sendVerificationMail() {
-    if (!FirebaseAuth.instance.currentUser!.emailVerified) {
-      //if email is not verified, send mail
-      FirebaseAuth.instance.currentUser!.sendEmailVerification();
+  static Future<bool> sendVerificationMail() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
       return true;
     }
-    return null;
+    return false;
   }
+
   //!========================================================================================
 
   static Future<Either<String, String>> sendResetPasswordMail(
@@ -115,16 +118,9 @@ class FirebaseAuthConsumer {
     }
   }
 
-  // static bool isUserAuthorized() {
-  //   //check if user logged in and email is verified
-  //   return (FirebaseAuth.instance.currentUser != null &&
-  //       FirebaseAuth.instance.currentUser!.emailVerified);
-  // }
-
   //!========================================================================================
 
-  static Future<Either<dynamic, Future<UserCredential>>>
-  signInWithGoogle() async {
+  static Future<Either<dynamic, UserCredential>> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -143,7 +139,9 @@ class FirebaseAuthConsumer {
       );
 
       // Once signed in, return the UserCredential
-      return Right(FirebaseAuth.instance.signInWithCredential(credential));
+      return Right(
+        await FirebaseAuth.instance.signInWithCredential(credential),
+      );
     } on PlatformException catch (e) {
       log('Google Sign-In Error: ${e.code}');
       return Left(FirebaseErrorHandler.handle(e.code));
@@ -162,7 +160,6 @@ class FirebaseAuthConsumer {
     }
   }
 
-  //!========================================================================================
   //!========================================================================================
   static Future<Either<String, UserCredential>> signInWithFacebook() async {
     try {
@@ -216,4 +213,5 @@ class FirebaseAuthConsumer {
   }
 
   //!========================================================================================
+ 
 }

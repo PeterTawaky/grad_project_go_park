@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_garage_final_project/core/utils/firebase_constants.dart';
 
 class FirebaseErrorHandler {

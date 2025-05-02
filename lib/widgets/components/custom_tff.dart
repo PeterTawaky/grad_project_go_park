@@ -27,6 +27,7 @@ class CustomTFF extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       // autovalidateMode: AutovalidateMode.onUserInteraction,
+      style: TextStyles.font14regularWhite,
       validator: validator,
       controller: controller,
       onChanged: (value) {
@@ -42,6 +43,7 @@ class CustomTFF extends StatelessWidget {
         prefixIcon: Icon(prefixIcon, color: ColorsManager.white),
         suffixIcon: Icon(suffixIcon, color: ColorsManager.white),
         hintText: hintText,
+        labelText: hintText,
         hintStyle: TextStyles.font14regularWhite,
       ),
     );
