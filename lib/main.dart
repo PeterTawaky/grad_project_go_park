@@ -1,11 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garage_final_project/app/go_park_app.dart';
-import 'package:smart_garage_final_project/cached/cache_helper.dart';
-import 'package:smart_garage_final_project/core/utils/device/device_utility.dart';
-import 'package:smart_garage_final_project/firebase/firebase_auth_consumer.dart';
-import 'package:smart_garage_final_project/observer/bloc_observer.dart';
+import 'app/go_park_app.dart';
+import 'cached/cache_helper.dart';
+import 'core/utils/device/device_utility.dart';
+import 'firebase/firebase_auth_consumer.dart';
+import 'observer/bloc_observer.dart';
 
 void main() async {
   //TODO DI

@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:smart_garage_final_project/model/elevator_model.dart';
+import '../model/elevator_model.dart';
 
 class FirebaseFireStoreConsumer {
   static final fireStore = FirebaseFirestore.instance;
@@ -42,22 +41,20 @@ class FirebaseFireStoreConsumer {
   }
 
   //!=====================================================================
-  static
-  // Future<Either<String, QuerySnapshot<Object?>>>
+  static Future<Either<String, List<QueryDocumentSnapshot<Object?>>>>
   getGeneralDocuments({required String collectionName}) async {
     try {
       QuerySnapshot response = await fireStore.collection(collectionName).get();
-      return response.docs;
-      // return Right(response);
+      // return response.docs;
+      return Right(response.docs);
     } catch (e) {
       log('error is ${e.toString()}');
-      // return Left(e.toString());
+      return Left(e.toString());
     }
   }
 
   //!=====================================================================
-  static
-  // Future<Either<String, QuerySnapshot<Object?>>>
+  static Future<Either<String, List<QueryDocumentSnapshot<Object?>>>>
   getSpecificDocuments({required String collectionName}) async {
     try {
       log(FirebaseAuth.instance.currentUser!.uid);
@@ -69,11 +66,40 @@ class FirebaseFireStoreConsumer {
                 isEqualTo: FirebaseAuth.instance.currentUser!.uid,
               )
               .get();
-      return response.docs;
-      // return Right(response);
+      // return response.docs;
+      return Right(response.docs);
     } catch (e) {
       log('error is ${e.toString()}');
-      // return Left(e.toString());
+      return Left(e.toString());
+    }
+  }
+
+  //!=====================================================================
+  static
+  // Future<Map<String, dynamic>?>
+  getDocumentData({
+    required String collectionPath,
+    required String documentId,
+  }) async {
+    try {
+      DocumentSnapshot docSnapshot =
+          await FirebaseFirestore.instance
+              .collection(collectionPath)
+              .doc(documentId)
+              .get();
+
+      if (docSnapshot.exists) {
+        // This will return the data as a Map<String, dynamic>
+        // return docSnapshot.data() as Map<String, dynamic>;
+        return docSnapshot;
+        // return docSnapshot.data() as Map<String, dynamic>;
+      } else {
+        print("Document not found");
+        return null;
+      }
+    } catch (e) {
+      print("Error getting document: $e");
+      return null;
     }
   }
 
@@ -214,36 +240,75 @@ class FirebaseFireStoreConsumer {
     return batch.commit(); //responsible for executing the batch
   }
 
-  static Future<void> deleteListofData({
-    // required List<Map<String, dynamic>> dataList,
-    required String collectionName,
-  }) async {
-    CollectionReference users = FirebaseFirestore.instance.collection(
-      collectionName,
-    );
-    final dataList = await FirebaseFireStoreConsumer.getGeneralDocuments(
-      collectionName: collectionName,
-    );
-    // log(dataList.toString());
-    WriteBatch batch = FirebaseFirestore.instance.batch();
-    for (int i = 1; i <= dataList.length; i++) {
-      batch.delete(
-        FirebaseFirestore.instance
-            .collection(collectionName)
-            .doc(dataList[i - 1]['id']),
-      );
-      // batch.delete(
-      //   FirebaseFirestore.instance
-      //       .collection(collectionName)
-      //       .doc(dataList[i - 1]['id']),
-      //   dataList[i - 1],
-      // );
+  // static chooseAvailableParkArea({required String collectionName}) async {
+  //   QuerySnapshot placeToPark =
+  //       await fireStore
+  //           .collection(collectionName)
+  //           .where('occupied', isEqualTo: false)
+  //           .orderBy('parkNumber')
+  //           .limit(1)
+  //           .get();
+  //   if (placeToPark.docs.isNotEmpty) {
+  //     return placeToPark.docs.first; //return the first document
+  //   } else if (placeToPark.docs.isEmpty) {
+  //     //TODO return message to the cubit
+  //     log('there is no place to park');
+  //     return null;
+  //   }
+  // }
+  static Future<Either<String, DocumentSnapshot<Object?>>>
+  chooseAvailableParkArea({required String collectionName}) async {
+    try {
+      QuerySnapshot placeToPark =
+          await fireStore
+              .collection(collectionName)
+              .where('available', isEqualTo: true)
+              // .orderBy('parkNumber') // removed to avoid index requirement
+              .limit(1)
+              .get();
+
+      if (placeToPark.docs.isNotEmpty) {
+        return Right(placeToPark.docs.first);
+      } else {
+        log('There is no place to park');
+        return Left('There is no place to park');
+      }
+    } catch (e) {
+      log('Error in chooseAvailableParkArea: $e');
+      return Left('Error in chooseAvailableParkArea: $e');
     }
-    return batch.commit(); //responsible for executing the batch
   }
 
-  static createRealTimeCollection({required String collectionName}) {
-    final Stream<QuerySnapshot> collectionStream =
-        FirebaseFirestore.instance.collection(collectionName).snapshots();
-  }
+  // static Future<void> deleteListofData({
+  //   // required List<Map<String, dynamic>> dataList,
+  //   required String collectionName,
+  // }) async {
+  //   CollectionReference users = FirebaseFirestore.instance.collection(
+  //     collectionName,
+  //   );
+  //   final dataList = await FirebaseFireStoreConsumer.getGeneralDocuments(
+  //     collectionName: collectionName,
+  //   );
+  //   // log(dataList.toString());
+  //   WriteBatch batch = FirebaseFirestore.instance.batch();
+  //   for (int i = 1; i <= dataList.length; i++) {
+  //     batch.delete(
+  //       FirebaseFirestore.instance
+  //           .collection(collectionName)
+  //           .doc(dataList[i - 1]['id']),
+  //     );
+  //     // batch.delete(
+  //     //   FirebaseFirestore.instance
+  //     //       .collection(collectionName)
+  //     //       .doc(dataList[i - 1]['id']),
+  //     //   dataList[i - 1],
+  //     // );
+  //   }
+  //   return batch.commit(); //responsible for executing the batch
+  // }
+
+  // static createRealTimeCollection({required String collectionName}) {
+  //   final Stream<QuerySnapshot> collectionStream =
+  //       FirebaseFirestore.instance.collection(collectionName).snapshots();
+  // }
 }

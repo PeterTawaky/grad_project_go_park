@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:smart_garage_final_project/core/utils/firebase_constants.dart';
+import '../core/utils/firebase_constants.dart';
 
 class FirebaseErrorHandler {
   static String handle(dynamic error) {

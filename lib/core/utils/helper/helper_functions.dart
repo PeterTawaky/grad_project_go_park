@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
+import '../theme/colors_manager.dart';
 
 class HelperFunctions {
   static void showSnackBar({

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_garage_final_project/core/utils/size_config.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
+import '../../core/utils/size_config.dart';
+import '../../core/utils/theme/colors_manager.dart';
 
 class CustomSocialIcon extends StatelessWidget {
   final void Function()? onTap;

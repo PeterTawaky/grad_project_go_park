@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:smart_garage_final_project/core/routes/app_routes.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/core/utils/theme/fonts_manager.dart';
-import 'package:smart_garage_final_project/firebase/firebase_auth_consumer.dart';
-import 'package:smart_garage_final_project/screens/go_park_screen.dart';
+import 'package:smart_garage_final_project/cached/cache_helper.dart';
+import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
+import 'package:smart_garage_final_project/model/park_area_model.dart';
+import '../core/routes/app_routes.dart';
+import '../core/utils/theme/colors_manager.dart';
+import '../core/utils/theme/fonts_manager.dart';
+import '../firebase/firebase_auth_consumer.dart';
+import 'go_park_screen.dart';
 
 class LocalAuthenticationScreen extends StatefulWidget {
   const LocalAuthenticationScreen({super.key});
@@ -48,7 +51,27 @@ class _LocalAuthenticationScreenState extends State<LocalAuthenticationScreen> {
     final bool? userIsValid = await _activeFingerPrintAuth();
     if (userIsValid != null && userIsValid) {
       if (FirebaseAuthConsumer.isUserAuthorized()) {
-        context.pushReplacementNamed(AppRoutes.goParkScreen);
+        if (CachedData.getData(key: KeysManager.userIsUsingService) == null) {
+          CachedData.setData(key: KeysManager.userIsUsingService, value: false);
+        } else {
+          if (CachedData.getData(key: KeysManager.userIsUsingService)) {
+            context.pushReplacementNamed(
+              AppRoutes.profileScreen,
+              extra: ParkAreaModel(
+                id: CachedData.getData(key: KeysManager.id),
+                floor: CachedData.getData(key: KeysManager.floor),
+                zone: CachedData.getData(key: KeysManager.zone),
+                spot: CachedData.getData(key: KeysManager.spot),
+                available: CachedData.getData(key: KeysManager.available),
+                userId: CachedData.getData(key: KeysManager.userId),
+                startTime: CachedData.getData(key: KeysManager.startTime),
+                parkNumber: CachedData.getData(key: KeysManager.parkNumber),
+              ),
+            );
+          } else {
+            context.pushReplacementNamed(AppRoutes.goParkScreen);
+          }
+        }
       } else {
         context.pushReplacementNamed(AppRoutes.loginScreen);
       }

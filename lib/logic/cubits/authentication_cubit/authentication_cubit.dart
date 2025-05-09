@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:smart_garage_final_project/cached/cache_helper.dart';
-import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
-import 'package:smart_garage_final_project/firebase/firebase_auth_consumer.dart';
+import '../../../cached/cache_helper.dart';
+import '../../../core/utils/keys_manager.dart';
+import '../../../firebase/firebase_auth_consumer.dart';
 
 part 'authentication_state.dart';
 

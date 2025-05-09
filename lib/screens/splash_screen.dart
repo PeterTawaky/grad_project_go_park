@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_garage_final_project/core/routes/app_routes.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/login_screen.dart';
-import 'package:smart_garage_final_project/screens/local_authentication_screen.dart';
+import '../core/routes/app_routes.dart';
+import '../core/utils/theme/colors_manager.dart';
+import '../login_screen.dart';
+import 'local_authentication_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

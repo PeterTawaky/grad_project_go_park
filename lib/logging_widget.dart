@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_garage_final_project/core/utils/app_strings.dart';
-import 'package:smart_garage_final_project/core/utils/size_config.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/core/utils/theme/fonts_manager.dart';
+import 'core/utils/app_strings.dart';
+import 'core/utils/size_config.dart';
+import 'core/utils/theme/colors_manager.dart';
+import 'core/utils/theme/fonts_manager.dart';
 
 class LoggingWidget extends StatelessWidget {
   final String loggingMessage;

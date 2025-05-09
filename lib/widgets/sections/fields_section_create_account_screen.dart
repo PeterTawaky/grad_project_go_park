@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_garage_final_project/core/utils/app_strings.dart';
-import 'package:smart_garage_final_project/core/utils/app_validator.dart';
-import 'package:smart_garage_final_project/core/utils/size_config.dart';
-import 'package:smart_garage_final_project/logic/provider/form_input.dart';
-import 'package:smart_garage_final_project/widgets/components/custom_tff.dart';
+import '../../core/utils/app_strings.dart';
+import '../../core/utils/app_validator.dart';
+import '../../core/utils/size_config.dart';
+import '../../logic/provider/form_input.dart';
+import '../components/custom_tff.dart';
 
 class FieldsSectionCreateAccountScreen extends StatelessWidget {
   const FieldsSectionCreateAccountScreen({super.key});

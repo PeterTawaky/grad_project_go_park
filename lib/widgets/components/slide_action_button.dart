@@ -1,11 +1,11 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import 'package:smart_garage_final_project/core/routes/app_routes.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/core/utils/theme/fonts_manager.dart';
-import 'package:smart_garage_final_project/screens/profile_screen.dart';
+import '../../core/utils/theme/colors_manager.dart';
+import '../../core/utils/theme/fonts_manager.dart';
+import '../../logic/cubits/parking_cubit/parking_cubit.dart';
 
 class SlideActionButton extends StatelessWidget {
   const SlideActionButton({super.key});
@@ -27,10 +27,7 @@ class SlideActionButton extends StatelessWidget {
           innerColor: ColorsManager.grey,
           sliderButtonIcon: Icon(Icons.bolt, color: ColorsManager.white),
           onSubmit: () {
-            //TODO: navigate to the next screen with go router
-            //TODO: add connection to the firebase
-            Future.delayed(Duration(seconds: 1), () {});
-            context.pushReplacementNamed(AppRoutes.profileScreen);
+            BlocProvider.of<ParkingCubit>(context).startParkingProcess();
             return null;
           },
           borderRadius: 22,

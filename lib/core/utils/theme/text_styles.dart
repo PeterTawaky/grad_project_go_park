@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/core/utils/theme/fonts_manager.dart';
+import 'colors_manager.dart';
+import 'fonts_manager.dart';
 
 class TextStyles {
   static TextStyle font25BoldWhite = TextStyle(

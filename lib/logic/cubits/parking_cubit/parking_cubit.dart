@@ -1,94 +1,88 @@
-import 'dart:async';
 import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:meta/meta.dart';
-import 'package:smart_garage_final_project/firebase/firebase_collections.dart';
-import 'package:smart_garage_final_project/model/elevator_model.dart';
-import 'package:smart_garage_final_project/model/park_area_model.dart';
+import 'package:smart_garage_final_project/cached/cache_helper.dart';
+import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
+import '../../../firebase/firebase_collections.dart';
+import '../../../firebase/flutter_fire_store_consumer.dart';
+import '../../../model/park_area_model.dart';
 
 part 'parking_state.dart';
 
-// class ParkingCubit extends Cubit<ParkingState> {
-//   final DatabaseReference _elevatorRef;
-//   StreamSubscription? _subscription;
-
-//   ParkingCubit()
-//     : _elevatorRef = FirebaseDatabase.instanceFor(
-//         app: Firebase.app(),
-//         databaseURL: 'https://go-park-df349.firebaseio.com', // Add this
-//       ).ref('Elevator/elv'),
-//       super(ParkingInitial()) {
-//     _setupConnection();
-//   }
-//   void _setupConnection() {
-//     // Enable persistence
-//     FirebaseDatabase.instance.setPersistenceEnabled(true);
-
-//     // Configure retry logic
-//     _elevatorRef.onValue.listen(
-//       (event) {
-//         // Handle data
-//       },
-//       onError: (error) {
-//         if (error is FirebaseException && error.code == 'connection_failed') {
-//           // Implement retry logic
-//           Future.delayed(Duration(seconds: 3), _setupConnection);
-//         }
-//       },
-//     );
-//   }
-
-//   void _startListening() {
-//     _subscription = _elevatorRef.onValue.listen(
-//       (event) {
-//         final data = event.snapshot.value;
-//         log(data.toString());
-//         if (data != null) {
-//           emit(
-//             ElevatorDataLoaded(
-//               elevatorData: ElevatorModel.fromJson(
-//                 data as Map<String, dynamic>,
-//               ),
-//             ),
-//           );
-//         } else {
-//           log('No data found');
-//           emit(ElevatorDataError(errorMsg: 'No data found'));
-//         }
-//       },
-//       onError: (error) {
-//         log(error.toString());
-//         emit(ElevatorDataError(errorMsg: error.toString()));
-//       },
-//     );
-//   }
-
-//   @override
-//   Future<void> close() {
-//     _subscription?.cancel();
-//     return super.close();
-//   }
-// }
 class ParkingCubit extends Cubit<ParkingState> {
-  ParkingCubit() : super(ParkingInitial()) {
-    _subscribeToDocument();
-  }
+  ParkingCubit() : super(ParkingInitial());
 
-  // listen to realtime updates
-  void _subscribeToDocument() {
-    FirebaseFirestore.instance.doc("Elevator/elv").snapshots().listen((
-      docSnapshot,
-    ) {
-      if (docSnapshot.exists) {
-        emit(
-          ElevatorDataLoaded(
-            elevatorData: ElevatorModel.fromJson(docSnapshot.data()!),
-          ),
+  startParkingProcess() async {
+    DocumentSnapshot? response =
+        await FirebaseFireStoreConsumer.getDocumentData(
+          collectionPath: FirebaseCollections.elevator,
+          documentId: 'elv',
         );
+
+    if (response != null) {
+      if (response['available'] == true) {
+        final parkArea =
+            await FirebaseFireStoreConsumer.chooseAvailableParkArea(
+              collectionName: FirebaseCollections.parkingAreas,
+            );
+        parkArea.fold((l) => emit(ParkingProcessFaild(message: l)), (parkArea) {
+          emit(
+            ParkingProcessSuccess(
+              parkArea: ParkAreaModel.fromJson(
+                parkArea.data() as Map<String, dynamic>,
+              ),
+            ),
+          );
+          log('park area is ${parkArea['id']}');
+          CachedData.setData(
+            key: KeysManager.available,
+            value: parkArea['available'],
+          );
+          CachedData.setData(key: KeysManager.floor, value: parkArea['floor']);
+          CachedData.setData(key: KeysManager.id, value: parkArea['id']);
+          CachedData.setData(
+            key: KeysManager.parkNumber,
+            value: parkArea['parkNumber'],
+          );
+          CachedData.setData(key: KeysManager.spot, value: parkArea['spot']);
+          CachedData.setData(
+            key: KeysManager.userId,
+            value: parkArea['userId'],
+          );
+          CachedData.setData(key: KeysManager.zone, value: parkArea['zone']);
+          CachedData.setData(
+            key: KeysManager.startTime,
+            value: parkArea['startTime'],
+          );
+          FirebaseFireStoreConsumer.setSpecificField(
+            collectionName: FirebaseCollections.parkingAreas,
+            documentId: parkArea['id'],
+            data: {
+              'available': false,
+              'startTime': FieldValue.serverTimestamp(),
+            },
+          );
+        });
+        CachedData.setData(key: KeysManager.userIsUsingService, value: true);
+        FirebaseFireStoreConsumer.setSpecificField(
+          collectionName: FirebaseCollections.elevator,
+          documentId: 'elv',
+          data: {'available': false},
+        );
+        Future.delayed(Duration(seconds: 10), () {
+          FirebaseFireStoreConsumer.setSpecificField(
+            collectionName: FirebaseCollections.elevator,
+            documentId: 'elv',
+            data: {'available': true},
+          );
+        });
+      } else {
+        emit(ParkingProcessFaild(message: 'Elevator is not available now'));
       }
-    });
+    } else {
+      emit(ParkingProcessFaild(message: 'opps, something went wrong'));
+    }
   }
 }

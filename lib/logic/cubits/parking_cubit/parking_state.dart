@@ -5,12 +5,15 @@ sealed class ParkingState {}
 
 final class ParkingInitial extends ParkingState {}
 
-// final class ParkingLoading extends ParkingState {}
 
-class ElevatorDataLoaded extends ParkingState {
-  final ElevatorModel elevatorData;
+class ParkingProcessSuccess extends ParkingState {
+  final ParkAreaModel parkArea;
 
-  ElevatorDataLoaded({required this.elevatorData});
+  ParkingProcessSuccess({required this.parkArea});
 }
 
+class ParkingProcessFaild extends ParkingState {
+  final String message;
 
+  ParkingProcessFaild({required this.message});
+}

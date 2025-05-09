@@ -1,11 +1,11 @@
 class ParkAreaModel {
-  final String? id;
+  final String id;
   final int floor;
   final String zone;
   final int spot;
-  final bool occupied;
+  final bool available;
   final String? userId;
-  final String? startTime;
+  final DateTime? startTime;
   final int parkNumber;
 
   ParkAreaModel({
@@ -13,7 +13,7 @@ class ParkAreaModel {
     required this.floor,
     required this.zone,
     required this.spot,
-    required this.occupied,
+    required this.available,
     required this.userId,
     required this.startTime,
     required this.parkNumber,
@@ -24,7 +24,7 @@ class ParkAreaModel {
       floor: json['floor'],
       zone: json['zone'],
       spot: json['spot'],
-      occupied: json['occupied'],
+      available: json['available'],
       userId: json['userId'],
       startTime: json['startTime'],
       parkNumber: json['parkNumber'],
@@ -36,10 +36,10 @@ class ParkAreaModel {
       'floor': floor,
       'zone': zone,
       'spot': spot,
-      'occupied': occupied,
+      'available': true,
       'userId': userId,
       'startTime': startTime,
-      'parkNumber': parkNumber
+      'parkNumber': parkNumber,
     };
   }
 }

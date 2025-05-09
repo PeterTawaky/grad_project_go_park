@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_garage_final_project/core/routes/router_generator.dart';
-import 'package:smart_garage_final_project/core/utils/theme/app_theme_data.dart';
+import '../core/routes/router_generator.dart';
+import '../core/utils/theme/app_theme_data.dart';
 
 class SmartGarage extends StatelessWidget {
   const SmartGarage({super.key});
