@@ -252,15 +252,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            FirebaseFireStoreConsumer.setListofData(
-              collectionName: 'Parking Areas',
-              dataList: parkAreaList.map((e) => e.toJson()).toList(),
-            );
-          },
-          child: Icon(Icons.add),
-        ),
         body: BlocProvider(
           create: (context) => ParkingTimerCubit(),
           child: Column(
