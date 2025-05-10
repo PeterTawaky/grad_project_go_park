@@ -5,6 +5,4 @@ class AppRoutes {
   static const splashScreen = '/splash-screen';
   static const localAuthenticationScreen = '/local-authentication-screen';
   static const profileScreen = '/profile-screen';
-
-  
 }

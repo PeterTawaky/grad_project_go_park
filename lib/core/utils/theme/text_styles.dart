@@ -17,6 +17,12 @@ class TextStyles {
     fontWeight: FontWeight.bold,
     fontFamily: FontsManager.poppins,
   );
+  static TextStyle font14BoldPurple = TextStyle(
+    color: ColorsManager.authScreenPurple,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+    fontFamily: FontsManager.poppins,
+  );
   static TextStyle font14regularWhite = TextStyle(
     color: ColorsManager.authScreenGrey,
     fontSize: 14.sp,
@@ -39,6 +45,18 @@ class TextStyles {
     color: ColorsManager.authScreenPurple,
     fontSize: 14.sp,
     // fontWeight: FontWeight.w500,
+    fontFamily: FontsManager.poppins,
+  );
+  static TextStyle font46regularWhite = TextStyle(
+    color: ColorsManager.white,
+    fontSize: 46.sp,
+    fontWeight: FontWeight.w900,
+    fontFamily: FontsManager.poppins,
+  );
+  static TextStyle font46regularPurple = TextStyle(
+    color: ColorsManager.authScreenPurple,
+    fontSize: 46.sp,
+    fontWeight: FontWeight.w900,
     fontFamily: FontsManager.poppins,
   );
 }

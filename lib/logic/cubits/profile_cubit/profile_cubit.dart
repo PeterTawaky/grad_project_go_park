@@ -63,6 +63,43 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  // void retrieveCar({required String parkAreaId}) async {
+  //   DocumentSnapshot? response =
+  //       await FirebaseFireStoreConsumer.getDocumentData(
+  //         collectionPath: FirebaseCollections.elevator,
+  //         documentId: 'elv',
+  //       );
+
+  //   if (response != null) {
+  //     if (response['available'] == true) {
+  //       emit(RetrieveProcessSuccess());
+  //       FirebaseFireStoreConsumer.setSpecificField(
+  //         collectionName: FirebaseCollections.parkingAreas,
+  //         documentId: parkAreaId,
+  //         data: {'available': true, 'startTime': null, 'userId': ''},
+  //       );
+  //       CachedData.setData(key: KeysManager.userIsUsingService, value: false);
+
+  //       FirebaseFireStoreConsumer.setSpecificField(
+  //         collectionName: FirebaseCollections.elevator,
+  //         documentId: 'elv',
+  //         data: {'available': false},
+  //       );
+  //       Future.delayed(Duration(seconds: 10), () {
+  //         FirebaseFireStoreConsumer.setSpecificField(
+  //           collectionName: FirebaseCollections.elevator,
+  //           documentId: 'elv',
+  //           data: {'available': true},
+  //         );
+  //       });
+  //     } else {
+  //       emit(RetrieveProcessFailed(message: 'Elevator is not available now'));
+  //     }
+  //   } else {
+  //     emit(RetrieveProcessFailed(message: 'opps, something went wrong'));
+  //   }
+  // }
+
   void retrieveCar({required String parkAreaId}) async {
     DocumentSnapshot? response =
         await FirebaseFireStoreConsumer.getDocumentData(
@@ -72,26 +109,32 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     if (response != null) {
       if (response['available'] == true) {
-        emit(RetrieveProcessSuccess());
-        FirebaseFireStoreConsumer.setSpecificField(
-          collectionName: FirebaseCollections.parkingAreas,
-          documentId: parkAreaId,
-          data: {'available': true, 'startTime': null, 'userId': ''},
-        );
-        CachedData.setData(key: KeysManager.userIsUsingService, value: false);
-
+        // Make elevator unavailable immediately
         FirebaseFireStoreConsumer.setSpecificField(
           collectionName: FirebaseCollections.elevator,
           documentId: 'elv',
           data: {'available': false},
         );
-        Future.delayed(Duration(seconds: 10), () {
+
+        // Update parking area
+        FirebaseFireStoreConsumer.setSpecificField(
+          collectionName: FirebaseCollections.parkingAreas,
+          documentId: parkAreaId,
+          data: {'available': true, 'startTime': null, 'userId': ''},
+        );
+
+        CachedData.setData(key: KeysManager.userIsUsingService, value: false);
+
+        // Schedule elevator to become available after 20 seconds
+        Future.delayed(const Duration(seconds: 20), () {
           FirebaseFireStoreConsumer.setSpecificField(
             collectionName: FirebaseCollections.elevator,
             documentId: 'elv',
             data: {'available': true},
           );
         });
+
+        emit(RetrieveProcessSuccess()); // Let BlocListener handle navigation
       } else {
         emit(RetrieveProcessFailed(message: 'Elevator is not available now'));
       }
@@ -99,4 +142,17 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(RetrieveProcessFailed(message: 'opps, something went wrong'));
     }
   }
+
+  // void retrieveCar({required String parkAreaId}) async {
+  //   await ElevatorService.retrieveCar(
+  //     parkAreaId: parkAreaId,
+  //     onSuccess: () {
+  //       CachedData.setData(key: KeysManager.userIsUsingService, value: false);
+  //       emit(RetrieveProcessSuccess());
+  //     },
+  //     onFailure: (message) {
+  //       emit(RetrieveProcessFailed(message: message));
+  //     },
+  //   );
+  // }
 }

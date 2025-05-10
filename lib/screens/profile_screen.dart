@@ -238,135 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       parkNumber: 20,
     ),
   ];
-  //!==========================================================
-  // // Timer control
-  // Timer? _timer;
 
-  // // Time tracking variables
-  // Duration _parkingDuration = Duration.zero;
-
-  // // Parking state
-  // bool _isParkingActive = false;
-  // DateTime? _parkingStartTime;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _loadParkingSession();
-  //    _isParkingActive ? null : startParking();
-  // }
-
-  // void _loadParkingSession() {
-  //   // Load from shared preferences or your cache
-  //   final storedStartTime = CachedData.getData(
-  //     key: KeysManager.parkingStartTime,
-  //   );
-  //   if (storedStartTime != null) {
-  //     _parkingStartTime = DateTime.parse(storedStartTime);
-  //     _isParkingActive = true;
-  //     _startTimer();
-  //   }
-  // }
-
-  // void _startTimer() {
-  //   // Calculate initial duration
-  //   if (_parkingStartTime != null) {
-  //     _parkingDuration = DateTime.now().difference(_parkingStartTime!);
-  //   }
-
-  //   // Update UI every second
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (_parkingStartTime != null) {
-  //       setState(() {
-  //         _parkingDuration = DateTime.now().difference(_parkingStartTime!);
-  //       });
-  //     }
-  //   });
-  // }
-
-  // void startParking() {
-  //   setState(() {
-  //     _parkingStartTime = DateTime.now();
-  //     _isParkingActive = true;
-  //     _parkingDuration = Duration.zero;
-  //   });
-
-  //   // Save to storage
-  //   CachedData.setData(
-  //     key: KeysManager.parkingStartTime,
-  //     value: _parkingStartTime!.toIso8601String(),
-  //   );
-
-  //   _startTimer();
-  // }
-
-  // void stopParking() {
-  //   _timer?.cancel();
-  //   _timer = null;
-
-  //   setState(() {
-  //     _isParkingActive = false;
-  //     _parkingStartTime = null;
-  //   });
-
-  //   // Clear storage
-  //   CachedData.deleteItem(key: KeysManager.parkingStartTime);
-  // }
-
-  // String _formatDuration(Duration duration) {
-  //   return '${duration.inHours.toString().padLeft(2, '0')}:'
-  //       '${(duration.inMinutes % 60).toString().padLeft(2, '0')}:'
-  //       '${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
-  // }
-
-  // double _calculatePrice(Duration duration) {
-  //   // 100 per hour = 0.027777... per second
-  //   return duration.inSeconds * 0.0277777777777778;
-  // }
-
-  // @override
-  // void dispose() {
-  //   _timer?.cancel();
-  //   super.dispose();
-  // }
-  //!==========================================================
-
-  // _startCount() {
-  //   Timer.periodic(Duration(seconds: 1), (timer) {
-  //     setState(() {
-  //       if (timeInSecond == 59) {
-  //         timeInSecond = 0;
-  //         timeInMinutes++;
-  //         CachedData.setData(
-  //           key: KeysManager.timeInMinutes,
-  //           value: timeInMinutes,
-  //         );
-  //       }
-  //       if (timeInMinutes == 59) {
-  //         timeInMinutes = 0;
-  //         timeInHours++;
-  //         CachedData.setData(key: KeysManager.timeInHours, value: timeInHours);
-  //       }
-  //       _price =
-  //           (timeInSecond * 0.0277777777777778) +
-  //           (timeInMinutes * 1.66666666666667) +
-  //           (timeInHours * 100);
-  //       CachedData.setData(
-  //         key: KeysManager.timeInSeconds,
-  //         value: timeInSecond++,
-  //       );
-  //     });
-  //   });
-  // }
-
-  @override
-  // void initState() {
-  //   timeInSecond = CachedData.getData(key: KeysManager.timeInSeconds) ?? 0;
-  //   timeInMinutes = CachedData.getData(key: KeysManager.timeInMinutes) ?? 0;
-  //   timeInHours = CachedData.getData(key: KeysManager.timeInHours) ?? 0;
-  //   // _startCount();
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -523,37 +395,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-
-              // Column(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Text(
-              //       'Parking Duration: ${_formatDuration(_parkingDuration)}',
-              //       style: const TextStyle(
-              //         fontSize: 24,
-              //         color: ColorsManager.white,
-              //       ),
-              //     ),
-              //     const SizedBox(height: 20),
-              //     Text(
-              //       'Current Price: \$${_calculatePrice(_parkingDuration).toStringAsFixed(2)}',
-              //       style: const TextStyle(
-              //         fontSize: 24,
-              //         color: ColorsManager.white,
-              //       ),
-              //     ),
-              //     const SizedBox(height: 40),
-              //     ElevatedButton(
-              //       onPressed: _isParkingActive ? null : startParking,
-              //       child: const Text('Start Parking'),
-              //     ),
-              //     const SizedBox(height: 20),
-              //     ElevatedButton(
-              //       onPressed: _isParkingActive ? stopParking : null,
-              //       child: const Text('Stop Parking'),
-              //     ),
-              //   ],
-              // ),
               TimerDisplayComponent(),
               SizedBox(height: 20.h),
               SizedBox(
@@ -731,7 +572,7 @@ class ElevatorContainerWidget extends StatelessWidget {
               child: CircularProgressIndicator(
                 color: ColorsManager.authScreenPurple,
               ),
-            ); //TODO when get Data
+            );
           },
         ),
       ),
@@ -740,12 +581,7 @@ class ElevatorContainerWidget extends StatelessWidget {
 }
 
 class FeesContainerWidget extends StatelessWidget {
-  const FeesContainerWidget({
-    super.key,
-    // required double price
-  });
-  // : _price = price;
-  // final double _price;
+  const FeesContainerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
