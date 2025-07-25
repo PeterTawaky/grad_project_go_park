@@ -42,32 +42,64 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       },
     );
   }
-  //!========================================================================================
 
+  //!========================================================================================
   signOut() async {
     emit(LoggingOutLoading());
 
-    String signInMethod = CachedData.getData(key: KeysManager.signInMethod);
+    String? signInMethod = CachedData.getData(key: KeysManager.signInMethod);
 
     switch (signInMethod) {
       case 'email':
         await FirebaseAuthConsumer.signOutEmailPasswordMethod();
+        log('signOutEmailPasswordMethod');
         break;
       case 'google':
+        // First sign out from Google
         await FirebaseAuthConsumer.signOutFromGoogle();
-        await FirebaseAuthConsumer.signOutEmailPasswordMethod(); // manually sign out from Firebase
+        log('signOutFromGoogle');
+        // Then sign out from Firebase
+        // await FirebaseAuthConsumer.signOutEmailPasswordMethod();
         break;
       case 'facebook':
+        // First sign out from Facebook
         await FirebaseAuthConsumer.signOutFromFacebook();
-        await FirebaseAuthConsumer.signOutEmailPasswordMethod(); // manually sign out from Firebase
+        // Then sign out from Firebase
+        await FirebaseAuthConsumer.signOutEmailPasswordMethod();
         break;
       default:
+        // Always sign out from Firebase as fallback
+        await FirebaseAuthConsumer.signOutEmailPasswordMethod();
         break;
     }
     Future.delayed(
       Duration(seconds: 2),
     ).then((value) => emit(LoggingOutSuccess()));
   }
+  // signOut() async {
+  //   emit(LoggingOutLoading());
+
+  //   String signInMethod = CachedData.getData(key: KeysManager.signInMethod);
+
+  //   switch (signInMethod) {
+  //     case 'email':
+  //       await FirebaseAuthConsumer.signOutEmailPasswordMethod();
+  //       break;
+  //     case 'google':
+  //       await FirebaseAuthConsumer.signOutFromGoogle();
+  //       await FirebaseAuthConsumer.signOutEmailPasswordMethod(); // manually sign out from Firebase
+  //       break;
+  //     case 'facebook':
+  //       await FirebaseAuthConsumer.signOutFromFacebook();
+  //       await FirebaseAuthConsumer.signOutEmailPasswordMethod(); // manually sign out from Firebase
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // Future.delayed(
+  //   Duration(seconds: 2),
+  // ).then((value) => emit(LoggingOutSuccess()));
+  // }
 
   //!========================================================================================
   sendResetPasswordMail({required String email}) async {

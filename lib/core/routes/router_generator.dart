@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smart_garage_final_project/screens/no_internet_widget.dart';
 import 'app_routes.dart';
 import '../../logic/cubits/authentication_cubit/authentication_cubit.dart';
 import '../../logic/cubits/profile_cubit/profile_cubit.dart';
@@ -67,11 +66,7 @@ class RouterGenerator {
         path: AppRoutes.profileScreen,
         builder: (context, state) {
           log(state.toString());
-          return BlocProvider<ProfileCubit>(
-            create: (context) => ProfileCubit()..setInitialImage(),
-
-            child: ProfileScreen(parkArea: state.extra as ParkAreaModel),
-          );
+          return ProfileScreen(parkArea: state.extra as ParkAreaModel);
         },
       ),
       GoRoute(

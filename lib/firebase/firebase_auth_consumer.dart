@@ -54,7 +54,7 @@ class FirebaseAuthConsumer {
         password: password.trim(),
       );
       if (!FirebaseAuth.instance.currentUser!.emailVerified) {
-        return Right('Please verify your email before signing in.');
+        return Right(' verify your email before signing in.');
       }
 
       return Right(null);

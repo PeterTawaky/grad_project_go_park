@@ -12,7 +12,20 @@
           "package_name": "com.example.smart_garage_final_project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "679017665841-76ude7n37o81jegfvg6uf80hlr127ar3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smart_garage_final_project",
+            "certificate_hash": "3e22cdee0cd5f40a88dfba9d6cefa81ce5b98aa7"
+          }
+        },
+        {
+          "client_id": "679017665841-5i53792lhumfa6ou8j462k5r6s9a64h1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDi6hsnXvXBsigd8OX0LrpxG83iNeaM7bs"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679017665841-35l8oh4d2bt7slred8m5l2b8th7o49sf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "679017665841-91avt1pjm4nk7r4srrar1mkq8nh43s87.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "tawakycreation.smartGarageFinalProject"
+              }
+            }
+          ]
         }
       }
     }

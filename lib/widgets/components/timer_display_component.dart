@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:smart_garage_final_project/core/utils/size_config.dart';
 import 'package:smart_garage_final_project/logic/cubits/parking_timer_cubit/parking_timer_cubit.dart';
 import 'package:smart_garage_final_project/logic/cubits/parking_timer_cubit/parking_timer_state.dart';
 import 'package:smart_garage_final_project/logic/cubits/profile_cubit/profile_cubit.dart';
@@ -18,7 +19,7 @@ class TimerDisplayComponent extends StatelessWidget {
       builder: (context, state) {
         return Container(
           alignment: Alignment.center,
-          margin: EdgeInsetsDirectional.symmetric(horizontal: 12.w),
+          // margin: EdgeInsetsDirectional.symmetric(horizontal: 12.w),
           width: width,
           height: width * 0.4,
           decoration: BoxDecoration(
