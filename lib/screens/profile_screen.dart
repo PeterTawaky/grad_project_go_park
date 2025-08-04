@@ -23,12 +23,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // File? imgFile;
-  // double _price = 0;
-
-  // late int timeInSecond;
-  // late int timeInMinutes;
-  // late int timeInHours;
 
   List<ParkAreaModel> parkAreaList = [
     ParkAreaModel(

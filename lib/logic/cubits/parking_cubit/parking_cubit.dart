@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:meta/meta.dart';
 import 'package:smart_garage_final_project/cached/cache_helper.dart';
 import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
@@ -15,74 +16,73 @@ class ParkingCubit extends Cubit<ParkingState> {
   ParkingCubit() : super(ParkingInitial());
 
   startParkingProcess() async {
-    DocumentSnapshot? response =
-        await FirebaseFireStoreConsumer.getDocumentData(
-          collectionPath: FirebaseCollections.elevator,
-          documentId: 'elv',
-        );
+    DatabaseReference ref = await FirebaseDatabase.instance.ref();
+    DataSnapshot isElevatorAvailable =
+        await ref.child('isElevatorAvailable').get();
+    // DocumentSnapshot? isElevatorAvailable =
+    //     await FirebaseFireStoreConsumer.getDocumentData(
+    //       collectionPath: FirebaseCollections.elevator,
+    //       documentId: 'elv',
+    //     );
 
-    if (response != null) {
-      if (response['available'] == true) {
-        final parkArea =
-            await FirebaseFireStoreConsumer.chooseAvailableParkArea(
-              collectionName: FirebaseCollections.parkingAreas,
-            );
-        parkArea.fold((l) => emit(ParkingProcessFaild(message: l)), (parkArea) {
-          emit(
-            ParkingProcessSuccess(
-              parkArea: ParkAreaModel.fromJson(
-                parkArea.data() as Map<String, dynamic>,
-              ),
+    // if (isElevatorAvailable != null) {
+    if (isElevatorAvailable.value == 1) {
+      final parkArea = await FirebaseFireStoreConsumer.chooseAvailableParkArea(
+        collectionName: FirebaseCollections.parkingAreas,
+      );
+      parkArea.fold((l) => emit(ParkingProcessFaild(message: l)), (
+        parkArea,
+      ) async {
+        emit(
+          ParkingProcessSuccess(
+            parkArea: ParkAreaModel.fromJson(
+              parkArea.data() as Map<String, dynamic>,
             ),
-          );
-          log('park area is ${parkArea['id']}');
-          CachedData.setData(
-            key: KeysManager.available,
-            value: parkArea['available'],
-          );
-          CachedData.setData(key: KeysManager.floor, value: parkArea['floor']);
-          CachedData.setData(key: KeysManager.id, value: parkArea['id']);
-          CachedData.setData(
-            key: KeysManager.parkNumber,
-            value: parkArea['parkNumber'],
-          );
-          CachedData.setData(key: KeysManager.spot, value: parkArea['spot']);
-          CachedData.setData(
-            key: KeysManager.userId,
-            value: parkArea['userId'],
-          );
-          CachedData.setData(key: KeysManager.zone, value: parkArea['zone']);
-          CachedData.setData(
-            key: KeysManager.startTime,
-            value: parkArea['startTime'],
-          );
-          FirebaseFireStoreConsumer.setSpecificField(
-            collectionName: FirebaseCollections.parkingAreas,
-            documentId: parkArea['id'],
-            data: {
-              'available': false,
-              'startTime': FieldValue.serverTimestamp(),
-            },
-          );
-        });
-        CachedData.setData(key: KeysManager.userIsUsingService, value: true);
-        FirebaseFireStoreConsumer.setSpecificField(
-          collectionName: FirebaseCollections.elevator,
-          documentId: 'elv',
-          data: {'available': false},
+          ),
         );
-        Future.delayed(Duration(seconds: 10), () {
-          FirebaseFireStoreConsumer.setSpecificField(
-            collectionName: FirebaseCollections.elevator,
-            documentId: 'elv',
-            data: {'available': true},
-          );
-        });
-      } else {
-        emit(ParkingProcessFaild(message: 'Elevator is not available now'));
-      }
+        log('park area is ${parkArea['id']}');
+        CachedData.setData(
+          key: KeysManager.available,
+          value: parkArea['available'],
+        );
+        CachedData.setData(key: KeysManager.floor, value: parkArea['floor']);
+        CachedData.setData(key: KeysManager.id, value: parkArea['id']);
+        CachedData.setData(
+          key: KeysManager.parkNumber,
+          value: parkArea['parkNumber'],
+        );
+        CachedData.setData(key: KeysManager.spot, value: parkArea['spot']);
+        CachedData.setData(key: KeysManager.userId, value: parkArea['userId']);
+        CachedData.setData(key: KeysManager.zone, value: parkArea['zone']);
+        CachedData.setData(
+          key: KeysManager.startTime,
+          value: parkArea['startTime'],
+        );
+        FirebaseFireStoreConsumer.setSpecificField(
+          collectionName: FirebaseCollections.parkingAreas,
+          documentId: parkArea['id'],
+          data: {'available': false, 'startTime': FieldValue.serverTimestamp()},
+        );
+        await ref.update({"isElevatorAvailable": 0, 'status': 1,'parkingPlace':parkArea['parkNumber']});
+        // FirebaseFireStoreConsumer.setSpecificField(
+        //   collectionName: FirebaseCollections.elevator,
+        //   documentId: 'elv',
+        //   data: {'available': false},
+        // );
+        // Future.delayed(Duration(seconds: 10), () {
+        //   FirebaseFireStoreConsumer.setSpecificField(
+        //     collectionName: FirebaseCollections.elevator,
+        //     documentId: 'elv',
+        //     data: {'available': true},
+        //   );
+        // });
+      });
+      CachedData.setData(key: KeysManager.userIsUsingService, value: true);
     } else {
-      emit(ParkingProcessFaild(message: 'opps, something went wrong'));
+      emit(ParkingProcessFaild(message: 'Elevator is not available now'));
     }
+    // } else {
+    //   emit(ParkingProcessFaild(message: 'opps, something went wrong'));
+    // }
   }
 }

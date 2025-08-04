@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ParkAreaModel {
   final String id;
   final int floor;
@@ -5,7 +7,7 @@ class ParkAreaModel {
   final int spot;
   final bool available;
   final String? userId;
-  final DateTime? startTime;
+  final Timestamp? startTime;
   final int parkNumber;
 
   ParkAreaModel({

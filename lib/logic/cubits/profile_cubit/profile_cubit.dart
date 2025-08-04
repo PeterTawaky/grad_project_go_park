@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:smart_garage_final_project/cached/cache_helper.dart';
@@ -10,8 +10,6 @@ import 'package:smart_garage_final_project/core/utils/app_assets.dart';
 import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
 import 'package:smart_garage_final_project/firebase/firebase_collections.dart';
 import 'package:smart_garage_final_project/firebase/flutter_fire_store_consumer.dart';
-import 'package:smart_garage_final_project/image_uploader.dart';
-import 'package:smart_garage_final_project/model/park_area_model.dart';
 import '../../../model/elevator_model.dart';
 
 part 'profile_state.dart';
@@ -20,23 +18,23 @@ class ProfileCubit extends Cubit<ProfileState> {
   Timer? _timer;
 
   ProfileCubit() : super(ParkingInitial()) {
-    _subscribeToDocument();
+    // _subscribeToDocument();
   }
 
-  // listen to realtime updates
-  void _subscribeToDocument() {
-    FirebaseFirestore.instance.doc("Elevator/elv").snapshots().listen((
-      docSnapshot,
-    ) {
-      if (docSnapshot.exists) {
-        emit(
-          ElevatorDataLoaded(
-            elevatorData: ElevatorModel.fromJson(docSnapshot.data()!),
-          ),
-        );
-      }
-    });
-  }
+  // // listen to realtime updates
+  // void _subscribeToDocument() {
+  //   FirebaseFirestore.instance.doc("Elevator/elv").snapshots().listen((
+  //     docSnapshot,
+  //   ) {
+  //     if (docSnapshot.exists) {
+  //       emit(
+  //         ElevatorDataLoaded(
+  //           elevatorData: ElevatorModel.fromJson(docSnapshot.data()!),
+  //         ),
+  //       );
+  //     }
+  //   });
+  // }
 
   setInitialImage() {
     if (CachedData.getData(key: KeysManager.profilePhoto) == null) {
@@ -63,96 +61,29 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  // void retrieveCar({required String parkAreaId}) async {
-  //   DocumentSnapshot? response =
-  //       await FirebaseFireStoreConsumer.getDocumentData(
-  //         collectionPath: FirebaseCollections.elevator,
-  //         documentId: 'elv',
-  //       );
-
-  //   if (response != null) {
-  //     if (response['available'] == true) {
-  //       emit(RetrieveProcessSuccess());
-  //       FirebaseFireStoreConsumer.setSpecificField(
-  //         collectionName: FirebaseCollections.parkingAreas,
-  //         documentId: parkAreaId,
-  //         data: {'available': true, 'startTime': null, 'userId': ''},
-  //       );
-  //       CachedData.setData(key: KeysManager.userIsUsingService, value: false);
-
-  //       FirebaseFireStoreConsumer.setSpecificField(
-  //         collectionName: FirebaseCollections.elevator,
-  //         documentId: 'elv',
-  //         data: {'available': false},
-  //       );
-  //       Future.delayed(Duration(seconds: 10), () {
-  //         FirebaseFireStoreConsumer.setSpecificField(
-  //           collectionName: FirebaseCollections.elevator,
-  //           documentId: 'elv',
-  //           data: {'available': true},
-  //         );
-  //       });
-  //     } else {
-  //       emit(RetrieveProcessFailed(message: 'Elevator is not available now'));
-  //     }
-  //   } else {
-  //     emit(RetrieveProcessFailed(message: 'opps, something went wrong'));
-  //   }
   // }
 
   void retrieveCar({required String parkAreaId}) async {
-    DocumentSnapshot? response =
-        await FirebaseFireStoreConsumer.getDocumentData(
-          collectionPath: FirebaseCollections.elevator,
-          documentId: 'elv',
-        );
+    DatabaseReference ref = await FirebaseDatabase.instance.ref();
+    DataSnapshot isElevatorAvailable =
+        await ref.child('isElevatorAvailable').get();
 
-    if (response != null) {
-      if (response['available'] == true) {
-        // Make elevator unavailable immediately
-        FirebaseFireStoreConsumer.setSpecificField(
-          collectionName: FirebaseCollections.elevator,
-          documentId: 'elv',
-          data: {'available': false},
-        );
+    if (isElevatorAvailable.value == 1) {
+      // Make elevator unavailable immediately
+      await ref.update({"isElevatorAvailable": 0, 'status': 2});
 
-        // Update parking area
-        FirebaseFireStoreConsumer.setSpecificField(
-          collectionName: FirebaseCollections.parkingAreas,
-          documentId: parkAreaId,
-          data: {'available': true, 'startTime': null, 'userId': ''},
-        );
+      // Update parking area
+      FirebaseFireStoreConsumer.setSpecificField(
+        collectionName: FirebaseCollections.parkingAreas,
+        documentId: parkAreaId,
+        data: {'available': true, 'startTime': null, 'userId': ''},
+      );
 
-        CachedData.setData(key: KeysManager.userIsUsingService, value: false);
+      CachedData.setData(key: KeysManager.userIsUsingService, value: false);
 
-        // Schedule elevator to become available after 20 seconds
-        Future.delayed(const Duration(seconds: 20), () {
-          FirebaseFireStoreConsumer.setSpecificField(
-            collectionName: FirebaseCollections.elevator,
-            documentId: 'elv',
-            data: {'available': true},
-          );
-        });
-
-        emit(RetrieveProcessSuccess()); // Let BlocListener handle navigation
-      } else {
-        emit(RetrieveProcessFailed(message: 'Elevator is not available now'));
-      }
+      emit(RetrieveProcessSuccess()); // Let BlocListener handle navigation
     } else {
-      emit(RetrieveProcessFailed(message: 'opps, something went wrong'));
+      emit(RetrieveProcessFailed(message: 'Elevator is not available now'));
     }
   }
-
-  // void retrieveCar({required String parkAreaId}) async {
-  //   await ElevatorService.retrieveCar(
-  //     parkAreaId: parkAreaId,
-  //     onSuccess: () {
-  //       CachedData.setData(key: KeysManager.userIsUsingService, value: false);
-  //       emit(RetrieveProcessSuccess());
-  //     },
-  //     onFailure: (message) {
-  //       emit(RetrieveProcessFailed(message: message));
-  //     },
-  //   );
-  // }
 }
