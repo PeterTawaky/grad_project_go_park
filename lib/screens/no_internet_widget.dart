@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_garage_final_project/core/utils/size_config.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/core/utils/theme/text_styles.dart';
+import '../core/utils/size_config.dart';
+import '../core/utils/theme/colors_manager.dart';
+import '../core/utils/theme/text_styles.dart';
 
 class NoInternetWidget extends StatelessWidget {
   const NoInternetWidget({super.key});

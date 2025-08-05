@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'core/utils/app_strings.dart';
+
 import 'core/utils/size_config.dart';
 import 'core/utils/theme/colors_manager.dart';
 import 'core/utils/theme/fonts_manager.dart';

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smart_garage_final_project/core/routes/app_routes.dart';
-import 'package:smart_garage_final_project/core/utils/helper/helper_functions.dart';
-import 'package:smart_garage_final_project/logic/cubits/parking_timer_cubit/parking_timer_cubit.dart';
-import 'package:smart_garage_final_project/widgets/components/fees_container_widget.dart';
-import 'package:smart_garage_final_project/widgets/sections/elevator_container_widget.dart';
-import 'package:smart_garage_final_project/widgets/sections/parking_section_container_widget.dart';
-import 'package:smart_garage_final_project/widgets/sections/personal_info_section.dart';
+import '../core/routes/app_routes.dart';
+import '../core/utils/helper/helper_functions.dart';
+import '../logic/cubits/parking_timer_cubit/parking_timer_cubit.dart';
+import '../widgets/components/fees_container_widget.dart';
+import '../widgets/sections/elevator_container_widget.dart';
+import '../widgets/sections/parking_section_container_widget.dart';
+import '../widgets/sections/personal_info_section.dart';
 import '../logic/cubits/profile_cubit/profile_cubit.dart';
 import '../model/park_area_model.dart';
 import '../widgets/components/modern_button.dart';
@@ -234,59 +234,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocListener<ProfileCubit, ProfileState>(
       listener: (context, state) {
         if (state is RetrieveProcessSuccess) {
+          context.read<ParkingTimerCubit>().stopParking();
           context.pushReplacement(AppRoutes.goParkScreen);
         } else if (state is RetrieveProcessFailed) {
           HelperFunctions.showSnackBar(msg: state.message, context: context);
         }
       },
       child: Scaffold(
-        body: BlocProvider(
-          create: (context) => ParkingTimerCubit(),
-          child: Column(
-            children: [
-              SizedBox(height: height * 0.05),
-              PersonalInfoSection(width: width),
-              Spacer(flex: 1),
-
-              TimerDisplayComponent(),
-              Spacer(flex: 2),
-
-              SizedBox(
-                height: height * 0.35,
-                child: Row(
-                  spacing: 5.w,
-                  children: [
-                    ParkingSectionContainerWidget(areaId: widget.parkArea.id),
-                    Expanded(
-                      child: Column(
-                        spacing: 5.h,
-                        children: [
-                          FeesContainerWidget(),
-                          ElevatorContainerWidget(),
-                        ],
-                      ),
+        body: Column(
+          children: [
+            SizedBox(height: height * 0.05),
+            PersonalInfoSection(width: width),
+            Spacer(flex: 1),
+        
+            TimerDisplayComponent(),
+            Spacer(flex: 2),
+        
+            SizedBox(
+              height: height * 0.35,
+              child: Row(
+                spacing: 5.w,
+                children: [
+                  ParkingSectionContainerWidget(areaId: widget.parkArea.id),
+                  Expanded(
+                    child: Column(
+                      spacing: 5.h,
+                      children: [
+                        FeesContainerWidget(),
+                        ElevatorContainerWidget(),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-              Spacer(flex: 3),
-
-              Builder(
-                builder: (context) {
-                  return ModernButton(
-                    text: "Retrieve Car",
-                    onPressed: () {
-                      BlocProvider.of<ProfileCubit>(
-                        context,
-                      ).retrieveCar(parkAreaId: widget.parkArea.id);
-                      context.read<ParkingTimerCubit>().stopParking();
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+        
+            Spacer(flex: 3),
+        
+            Builder(
+              builder: (context) {
+                return ModernButton(
+                  text: "Retrieve Car",
+                  onPressed: () {
+                    BlocProvider.of<ProfileCubit>(
+                      context,
+                    ).retrieveCar(parkAreaId: widget.parkArea.id);
+                    
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

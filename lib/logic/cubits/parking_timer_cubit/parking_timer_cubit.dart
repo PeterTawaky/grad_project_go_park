@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_garage_final_project/cached/cache_helper.dart';
-import 'package:smart_garage_final_project/core/utils/keys_manager.dart';
-import 'package:smart_garage_final_project/logic/cubits/parking_timer_cubit/parking_timer_state.dart';
+import '../../../cached/cache_helper.dart';
+import '../../../core/utils/keys_manager.dart';
+import 'parking_timer_state.dart';
 
 class ParkingTimerCubit extends Cubit<ParkingTimerState> {
   Timer? _timer;

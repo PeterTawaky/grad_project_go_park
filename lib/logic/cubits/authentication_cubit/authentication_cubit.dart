@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import '../../../cached/cache_helper.dart';
 import '../../../core/utils/keys_manager.dart';
 import '../../../firebase/firebase_auth_consumer.dart';

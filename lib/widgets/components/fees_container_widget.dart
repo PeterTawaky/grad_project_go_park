@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_garage_final_project/core/utils/size_config.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/logic/cubits/parking_timer_cubit/parking_timer_cubit.dart';
-import 'package:smart_garage_final_project/logic/cubits/parking_timer_cubit/parking_timer_state.dart';
+import '../../core/utils/size_config.dart';
+import '../../core/utils/theme/colors_manager.dart';
+import '../../logic/cubits/parking_timer_cubit/parking_timer_cubit.dart';
+import '../../logic/cubits/parking_timer_cubit/parking_timer_state.dart';
 
 class FeesContainerWidget extends StatelessWidget {
   const FeesContainerWidget({super.key});

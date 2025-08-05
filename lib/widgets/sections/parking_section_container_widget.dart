@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_garage_final_project/core/utils/app_assets.dart';
-import 'package:smart_garage_final_project/core/utils/size_config.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/core/utils/theme/text_styles.dart';
+import '../../core/utils/app_assets.dart';
+import '../../core/utils/size_config.dart';
+import '../../core/utils/theme/colors_manager.dart';
+import '../../core/utils/theme/text_styles.dart';
 
 class ParkingSectionContainerWidget extends StatelessWidget {
   final String areaId;

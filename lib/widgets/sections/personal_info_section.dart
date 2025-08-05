@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:smart_garage_final_project/core/utils/app_assets.dart';
-import 'package:smart_garage_final_project/core/utils/theme/colors_manager.dart';
-import 'package:smart_garage_final_project/logic/cubits/profile_cubit/profile_cubit.dart';
+import '../../core/utils/app_assets.dart';
+import '../../core/utils/theme/colors_manager.dart';
+import '../../logic/cubits/profile_cubit/profile_cubit.dart';
 
 class PersonalInfoSection extends StatelessWidget {
   const PersonalInfoSection({super.key, required this.width});

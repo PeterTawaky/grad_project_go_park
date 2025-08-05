@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import 'package:smart_garage_final_project/logic/cubits/profile_cubit/profile_cubit.dart';
+import '../../logic/cubits/profile_cubit/profile_cubit.dart';
 import '../../core/utils/theme/colors_manager.dart';
 import '../../core/utils/theme/fonts_manager.dart';
 import '../../logic/cubits/parking_cubit/parking_cubit.dart';
