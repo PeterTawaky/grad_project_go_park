@@ -1,62 +1,48 @@
-# Go_Park
+# 🚗 GoPark – Smart Parking System
 
-a mobile application for parking cars using your smart phone to control ESP32
+![GoPark Cover](./assets/cover.png) <!-- ضع صورة الكفر اللي عملناها أو أي Mockup -->
 
-## 1) Features:
+## 📌 Overview
 
-1. Automatic transfer of cars to and from the garage without any human intervention.
-2. Make a payment invoice according to the period spent by the car inside the garage
+**GoPark** is a smart parking system developed as a graduation project.  
+It aims to simplify the process of **finding, reserving, and managing parking spots** through a mobile-first solution that integrates **Flutter, Firebase, and IoT hardware (ESP32)**.
 
-## 2) algo:
+The system allows users to:
 
-### input => Process => Output
+- Reserve parking spots in real-time.
+- Control elevators and motors inside the garage.
+- Track parking duration from their profile.
+- Enjoy a modern, simple, and user-friendly interface.
 
-enterPulse | searching algorithm
-isElv_1_Empty
-grage places[ ]=true
-time count [ ]
-exitPulse[]
+---
 
-```mermaid
-graph LR
+## 🛠️ Tech Stack
 
-    A[enterPulse];
+- **Mobile App:** Flutter (Bloc/Cubit, Syncfusion Charts)
+- **Backend:** Firebase Firestore, Realtime Database, Authentication
+- **Hardware:** ESP32-WROOM-32, (Motors + Sensors)
+- **Other:** Google Authentication, Bluetooth/WiFi connectivity
 
-    A-->start_button
-    A-->flutter_app
-    A-->Touch_screen
-    A-->sensor
+---
 
-```
+## ✨ Features
 
-### Logic to Enter the Garage
+- 🔑 **Secure Login** with Google Authentication.
+- 📍 **Real-time Parking Availability** updates via Firebase.
+- ⏳ **Parking Timer** inside user profile.
+- 🛗 **Elevator Control** through the mobile app.
+- 📊 **Charts & Data Visualization** with Syncfusion Flutter Charts.
+- ⚡ **Smooth Integration** between mobile and IoT devices.
 
-```mermaid
-flowchart TB
-A([start])==>B[/apply enterPulse/]
-B==>C{is there an elevator empty?}
-C==NO==>D[/there is no empty elevator try again later/]
-C==yes==>E[Searching Algorithm]
-E==>F{empty place is founded?}
-F==No ==>G[sorry no place empty]
-F==Yes==>H[apply motion to motors to move the car to it's place]
-H==>I[grage place key=false ]
-I==>J[Start time count]
-J==>K([End])
-```
+---
 
-### Logic to Exit the Garage
+## 🔌 System Workflow
 
-```mermaid
-flowchart TB
-A([start])==>B[/apply exitPulse/]
-B==>C{is there an elevator empty?}
-C==NO==>D[/there is no empty elevator try again later/]
-C==yes==>E{at this key there is a car?}
-E==NO==>F[there is no car here]
-E==Yes==>G[apply motion to motors to move the car outside]
-G==>H[grage place key=true ]
-H==>I[End time count]
-I==>J[/Show payment invoice to user/]
+![park Car](./assets/parking_car_workflow.PNG)  
+![Retrieve Car](./assets/retrieve_car_workflow.PNG)
 
-```
+## 🔗 Resources
+
+[Behance Link](https://www.behance.net/gallery/232667935/Go-Park-Smart-Parking-System)
+
+## [Youtube Video](https://www.behance.net/gallery/232667935/Go-Park-Smart-Parking-System)
